@@ -9,6 +9,8 @@ using namespace std;
 #define WINDOW_SIZE_X 600
 #define WINDOW_SIZE_Y 600
 
+extern void Algorithm_BFS();
+
 struct I_BLock g_Block;
 
 GLfloat rtx = -0.5f, rty = -0.5f, rtz = 0.0f;
@@ -16,8 +18,7 @@ GLfloat step = 0.05;
 GLfloat exp = 1e-3;
 
 void init()
-{
-	
+{	
 	glLoadIdentity();
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	g_Block.leftUp_x = 0.05;
@@ -25,7 +26,7 @@ void init()
 	g_Block.rightDown_x = 0.15;
 	g_Block.rightDown_y = 0.85;
 
-	
+	Algorithm_BFS();
 }
 
 void draMaze()
@@ -71,7 +72,7 @@ void draw(void)
 	glColor3f(1.0,1.0,1.0);
 
 	glPushMatrix();
-	printf("%f %f %f\n", rtx, rty, rtz);
+	//printf("%f %f %f\n", rtx, rty, rtz);
 	glTranslatef(rtx, rty, rtz);
 
 	glBegin(GL_LINE_STRIP);	    
