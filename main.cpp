@@ -1,40 +1,91 @@
 #include <glut.h>
 #include <cstdio>
 #include <cstdlib>
+#include"iFindPath.h"
 
 using namespace std;
 
 #define TIMER_INTERVAL_VALUE 800
-#define WINDOW_SIZE_X 400
-#define WINDOW_SIZE_Y 400
+#define WINDOW_SIZE_X 600
+#define WINDOW_SIZE_Y 600
 
-GLfloat rtx = 0.8f, rty = 0.0f, rtz = 0.0f;
+struct I_BLock g_Block;
+
+GLfloat rtx = -0.5f, rty = -0.5f, rtz = 0.0f;
 GLfloat step = 0.05;
 GLfloat exp = 1e-3;
 
 void init()
 {
+	
 	glLoadIdentity();
 	glClearColor(0.0, 0.0, 0.0, 0.0);
+	g_Block.leftUp_x = 0.05;
+	g_Block.leftUp_y = 0.95;
+	g_Block.rightDown_x = 0.15;
+	g_Block.rightDown_y = 0.85;
+
+	
+}
+
+void draMaze()
+{
+	struct I_BLock tmpBlock;
+
+	glColor3f(1,1,1);
+	tmpBlock.leftUp_x = 0.2;
+	tmpBlock.leftUp_y = 1;
+	tmpBlock.rightDown_x = 0.4;
+	tmpBlock.rightDown_y = 0.8;
+
+	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
+
+	tmpBlock.leftUp_x = 0.2;
+	tmpBlock.leftUp_y = 0.8;
+	tmpBlock.rightDown_x = 0.4;
+	tmpBlock.rightDown_y = 0.6;
+	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
+
+	tmpBlock.leftUp_x = 0.6;
+	tmpBlock.leftUp_y = 0.8;
+	tmpBlock.rightDown_x = 0.8;
+	tmpBlock.rightDown_y = 0.4;
+	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
+
+	tmpBlock.leftUp_x = 0.2;
+	tmpBlock.leftUp_y = 0.4;
+	tmpBlock.rightDown_x = 0.8;
+	tmpBlock.rightDown_y = 0.2;
+	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
+
+	tmpBlock.leftUp_x = 0.6;
+	tmpBlock.leftUp_y = 0.2;
+	tmpBlock.rightDown_x = 0.8;
+	tmpBlock.rightDown_y = 0;
+	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
 }
 
 void draw(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1.0,1.0,1.0);
 
 	glPushMatrix();
 	printf("%f %f %f\n", rtx, rty, rtz);
 	glTranslatef(rtx, rty, rtz);
 
-	/*glBegin(GL_LINE_STRIP);	    
-		glVertex2f(-0.5f, 0.5f);
-		glVertex2f(-0.5f, -0.5f);
-		glVertex2f(0.5f, -0.5f);
-		glVertex2f(0.5f, 0.5f);
-		glVertex2f(-0.5f, 0.5f);
-	glEnd();*/
+	glBegin(GL_LINE_STRIP);	    
+		glVertex2f(0, 1);
+		glVertex2f(0, 0);
+		glVertex2f(1, 0);
+		glVertex2f(1, 1);
+		glVertex2f(0, 1);
+	glEnd();
 
-	glRectf(-0.25,0.25,0.25,-0.25);
+	glColor3f(1,0,0);
+	glRectf(g_Block.leftUp_x, g_Block.leftUp_y, g_Block.rightDown_x, g_Block.rightDown_y);
+
+	draMaze();	
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -42,9 +93,8 @@ void draw(void)
 
 void timerFunction(int value)
 {
-	if(rtx + 0.7 <= 0.001)
-		rtx = 0;
-	rtx -= 0.1;
+	g_Block.leftUp_x -= 0.05;
+	g_Block.rightDown_x -= 0.05;
 	
 	glutPostRedisplay();
 	glutTimerFunc(TIMER_INTERVAL_VALUE, timerFunction, 1);
@@ -85,6 +135,7 @@ int main(int argc, char *argv[])
 	init();
 
 	glutDisplayFunc(draw);
+	
 	//glutIdleFunc(move);
 	glutSpecialFunc(processKeyBoard);
 
