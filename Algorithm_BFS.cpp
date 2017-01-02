@@ -24,11 +24,11 @@ int is_empty(void)
 }
 
 int maze[MAX_ROW][MAX_COL] = {
+    0, 1, 1, 0, 0,
     0, 1, 0, 0, 0,
     0, 1, 0, 1, 0,
     0, 0, 0, 1, 0,
-    0, 1, 1, 1, 0,
-    0, 0, 0, 1, 0,
+    0, 1, 0, 0, 0,
 };
 
 void print_maze(void)

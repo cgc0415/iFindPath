@@ -8,10 +8,13 @@ using namespace std;
 #define TIMER_INTERVAL_VALUE 800
 #define WINDOW_SIZE_X 600
 #define WINDOW_SIZE_Y 600
+#define MAZE_ROW 5
 
 extern void Algorithm_BFS();
+extern int maze[5][5];
 
 struct I_BLock g_Block;
+int bkp_maze[5][5]; //存放maze中的原始数据
 
 int g_StepIndex = 0; //第几步
 int g_Steps = 0; //从初始位置到终点最少需要走的步数
@@ -32,6 +35,14 @@ void init()
 	g_Block.rightDown_x = 0.15;
 	g_Block.rightDown_y = 0.85;
 
+	for (int i = 0; i < MAZE_ROW; i++)
+	{
+		for (int j = 0; j < MAZE_ROW; j++)
+		{
+			bkp_maze[i][j] = maze[i][j];
+		}
+	}
+
 	Algorithm_BFS();
 
 	for(int i = 0; i < g_Steps; i++)
@@ -46,36 +57,24 @@ void draMaze()
 	struct I_BLock tmpBlock;
 
 	glColor3f(1,1,1);
-	tmpBlock.leftUp_x = 0.2;
-	tmpBlock.leftUp_y = 1;
-	tmpBlock.rightDown_x = 0.4;
-	tmpBlock.rightDown_y = 0.8;
 
-	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
+	for (int rowIdx = 0; rowIdx < 5; rowIdx++)
+	{
+		for (int colIdx = 0; colIdx < 5; colIdx++)
+		{
+			if (bkp_maze[rowIdx][colIdx])
+			{
+				tmpBlock.leftUp_x = colIdx * 0.2;
+				tmpBlock.leftUp_y = (5-rowIdx) * 0.2;
 
-	tmpBlock.leftUp_x = 0.2;
-	tmpBlock.leftUp_y = 0.8;
-	tmpBlock.rightDown_x = 0.4;
-	tmpBlock.rightDown_y = 0.6;
-	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
+				tmpBlock.rightDown_x = colIdx * 0.2 + 0.2;
+				tmpBlock.rightDown_y = (5-rowIdx-1) * 0.2;
+				glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
+			}
 
-	tmpBlock.leftUp_x = 0.6;
-	tmpBlock.leftUp_y = 0.8;
-	tmpBlock.rightDown_x = 0.8;
-	tmpBlock.rightDown_y = 0.4;
-	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
+		}
 
-	tmpBlock.leftUp_x = 0.2;
-	tmpBlock.leftUp_y = 0.4;
-	tmpBlock.rightDown_x = 0.8;
-	tmpBlock.rightDown_y = 0.2;
-	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
-
-	tmpBlock.leftUp_x = 0.6;
-	tmpBlock.leftUp_y = 0.2;
-	tmpBlock.rightDown_x = 0.8;
-	tmpBlock.rightDown_y = 0;
-	glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
+	}
 }
 
 void draw(void)
