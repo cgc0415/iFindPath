@@ -13,6 +13,12 @@ extern void Algorithm_BFS();
 
 struct I_BLock g_Block;
 
+int g_StepIndex = 0; //第几步
+int g_Steps = 0; //从初始位置到终点最少需要走的步数
+struct PathPoint resultPath[25]; //从BFS算法中得到的结果是倒序排列的
+struct PathPoint startToEndPath[25]; //从起点到终点路径
+
+
 GLfloat rtx = -0.5f, rty = -0.5f, rtz = 0.0f;
 GLfloat step = 0.05;
 GLfloat exp = 1e-3;
@@ -27,6 +33,12 @@ void init()
 	g_Block.rightDown_y = 0.85;
 
 	Algorithm_BFS();
+
+	for(int i = 0; i < g_Steps; i++)
+	{
+		startToEndPath[i].row = resultPath[g_Steps-i-1].row;
+		startToEndPath[i].col = resultPath[g_Steps-i-1].col;
+	}
 }
 
 void draMaze()
@@ -94,10 +106,22 @@ void draw(void)
 
 void timerFunction(int value)
 {
-	g_Block.leftUp_x -= 0.05;
-	g_Block.rightDown_x -= 0.05;
+	if(g_Steps ==  g_StepIndex)
+		return;
+
+	int rowOffset = startToEndPath[g_StepIndex+1].row - startToEndPath[g_StepIndex].row;
+	int colOffset = startToEndPath[g_StepIndex+1].col - startToEndPath[g_StepIndex].col;
+
+	g_Block.leftUp_x += colOffset * 0.2;
+	g_Block.leftUp_y -= rowOffset * 0.2;
+
+	g_Block.rightDown_x += colOffset * 0.2;
+	g_Block.rightDown_y -= rowOffset * 0.2;
 	
 	glutPostRedisplay();
+
+	g_StepIndex++;
+
 	glutTimerFunc(TIMER_INTERVAL_VALUE, timerFunction, 1);
 }
 

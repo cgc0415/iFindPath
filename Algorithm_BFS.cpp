@@ -3,6 +3,8 @@
 #define MAX_ROW 5
 #define MAX_COL 5
 
+extern int g_Steps;
+extern struct PathPoint{ int row, col;} resultPath[25];
 struct point { int row, col, predecessor; } queue[512];
 int head = 0, tail = 0;
 
@@ -24,7 +26,7 @@ int is_empty(void)
 int maze[MAX_ROW][MAX_COL] = {
     0, 1, 0, 0, 0,
     0, 1, 0, 1, 0,
-    0, 0, 0, 0, 0,
+    0, 0, 0, 1, 0,
     0, 1, 1, 1, 0,
     0, 0, 0, 1, 0,
 };
@@ -50,7 +52,7 @@ void visit(int row, int col)
 void Algorithm_BFS()
 {
 	struct point p = { 0, 0, -1 };
-
+	
     maze[p.row][p.col] = 2;
     enqueue(p);
     
@@ -73,12 +75,22 @@ void Algorithm_BFS()
             visit(p.row-1, p.col);
         print_maze();
     }
+
     if (p.row == MAX_ROW - 1 && p.col == MAX_COL - 1) {
         printf("(%d, %d)\n", p.row, p.col);
+		resultPath[g_Steps].row = p.row;
+		resultPath[g_Steps].col = p.col;
+		g_Steps++;
+
         while (p.predecessor != -1) {
             p = queue[p.predecessor];
             printf("(%d, %d)\n", p.row, p.col);
+			resultPath[g_Steps].row = p.row;
+			resultPath[g_Steps].col = p.col;
+			g_Steps++;
         }
     } else
         printf("No path!\n");
+
+	printf("steps:%d\n",g_Steps);
 }

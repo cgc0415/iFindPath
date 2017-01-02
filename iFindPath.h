@@ -12,6 +12,10 @@ struct I_BLock
 	GLfloat rightDown_y;
 };
 
-
+struct PathPoint
+{
+	int row;
+	int col;
+};
 
 #endif
