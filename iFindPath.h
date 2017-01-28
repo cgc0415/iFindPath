@@ -18,4 +18,10 @@ struct PathPoint
 	int col;
 };
 
+#define MAX_ROW 7
+#define MAX_COL 7
+
+extern int g_Steps;
+extern struct PathPoint resultPath[25];
+
 #endif

@@ -8,13 +8,12 @@ using namespace std;
 #define TIMER_INTERVAL_VALUE 800
 #define WINDOW_SIZE_X 600
 #define WINDOW_SIZE_Y 600
-#define MAZE_ROW 5
 
 extern void Algorithm_BFS();
-extern int maze[5][5];
+extern int maze[MAX_ROW][MAX_COL];
 
 struct I_BLock g_Block;
-int bkp_maze[5][5]; //存放maze中的原始数据
+int bkp_maze[MAX_ROW][MAX_COL]; //存放maze中的原始数据
 
 int g_StepIndex = 0; //第几步
 int g_Steps = 0; //从初始位置到终点最少需要走的步数
@@ -25,19 +24,20 @@ struct PathPoint startToEndPath[25]; //从起点到终点路径
 GLfloat rtx = -0.5f, rty = -0.5f, rtz = 0.0f;
 GLfloat step = 0.05;
 GLfloat exp = 1e-3;
+GLfloat g_interval = 1.0 / MAX_ROW;
 
 void init()
 {	
 	glLoadIdentity();
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	g_Block.leftUp_x = 0.05;
-	g_Block.leftUp_y = 0.95;
-	g_Block.rightDown_x = 0.15;
-	g_Block.rightDown_y = 0.85;
+	g_Block.leftUp_x = 0.02;
+	g_Block.leftUp_y = 0.98;
+	g_Block.rightDown_x = 0.12;
+	g_Block.rightDown_y = 0.88;
 
-	for (int i = 0; i < MAZE_ROW; i++)
+	for (int i = 0; i < MAX_ROW; i++)
 	{
-		for (int j = 0; j < MAZE_ROW; j++)
+		for (int j = 0; j < MAX_COL; j++)
 		{
 			bkp_maze[i][j] = maze[i][j];
 		}
@@ -58,17 +58,17 @@ void draMaze()
 
 	glColor3f(1,1,1);
 
-	for (int rowIdx = 0; rowIdx < 5; rowIdx++)
+	for (int rowIdx = 0; rowIdx < MAX_ROW; rowIdx++)
 	{
-		for (int colIdx = 0; colIdx < 5; colIdx++)
+		for (int colIdx = 0; colIdx < MAX_COL; colIdx++)
 		{
 			if (bkp_maze[rowIdx][colIdx])
 			{
-				tmpBlock.leftUp_x = colIdx * 0.2;
-				tmpBlock.leftUp_y = (5-rowIdx) * 0.2;
+				tmpBlock.leftUp_x = colIdx * g_interval;
+				tmpBlock.leftUp_y = (MAX_ROW-rowIdx) * g_interval;
 
-				tmpBlock.rightDown_x = colIdx * 0.2 + 0.2;
-				tmpBlock.rightDown_y = (5-rowIdx-1) * 0.2;
+				tmpBlock.rightDown_x = colIdx * g_interval + g_interval;
+				tmpBlock.rightDown_y = (MAX_COL-rowIdx-1) * g_interval;
 				glRectf(tmpBlock.leftUp_x, tmpBlock.leftUp_y, tmpBlock.rightDown_x, tmpBlock.rightDown_y);
 			}
 
@@ -111,11 +111,11 @@ void timerFunction(int value)
 	int rowOffset = startToEndPath[g_StepIndex+1].row - startToEndPath[g_StepIndex].row;
 	int colOffset = startToEndPath[g_StepIndex+1].col - startToEndPath[g_StepIndex].col;
 
-	g_Block.leftUp_x += colOffset * 0.2;
-	g_Block.leftUp_y -= rowOffset * 0.2;
+	g_Block.leftUp_x += colOffset * g_interval;
+	g_Block.leftUp_y -= rowOffset * g_interval;
 
-	g_Block.rightDown_x += colOffset * 0.2;
-	g_Block.rightDown_y -= rowOffset * 0.2;
+	g_Block.rightDown_x += colOffset * g_interval;
+	g_Block.rightDown_y -= rowOffset * g_interval;
 	
 	glutPostRedisplay();
 

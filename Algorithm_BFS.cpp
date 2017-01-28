@@ -1,10 +1,7 @@
 #include<stdio.h>
+#include"iFindPath.h"
 
-#define MAX_ROW 5
-#define MAX_COL 5
 
-extern int g_Steps;
-extern struct PathPoint{ int row, col;} resultPath[25];
 struct point { int row, col, predecessor; } queue[512];
 int head = 0, tail = 0;
 
@@ -24,11 +21,13 @@ int is_empty(void)
 }
 
 int maze[MAX_ROW][MAX_COL] = {
-    0, 1, 1, 0, 0,
-    0, 1, 0, 0, 0,
-    0, 1, 0, 1, 0,
-    0, 0, 0, 1, 0,
-    0, 1, 0, 0, 0,
+    0, 1, 1, 1, 0,0,0,
+    0, 1, 0, 0, 0,1,0,
+    0, 1, 1, 1, 0,1,0,
+    0, 1, 0, 0, 0,1,0,
+    0, 1, 0, 1, 0,1,0,
+	0, 1, 0, 1, 0,0,0,
+	0, 0, 0, 1, 1,1,0
 };
 
 void print_maze(void)
